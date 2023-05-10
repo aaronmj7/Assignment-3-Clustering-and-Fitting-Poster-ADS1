@@ -13,6 +13,12 @@ import seaborn as sns
 
 
 def read_df(fname):
+    ''' Function to read a csv file in world bank format and clean it for
+    clustering.
+    Arguments:
+        Name/file path of a csv file.
+    Returns the dataframe and transposed dataframe.
+    '''
     # reading from csv
     df = pd.read_csv(fname, skiprows=4)
 
@@ -33,6 +39,45 @@ def read_df(fname):
     df_t.dropna(how='all', axis=1, inplace=True)
 
     return df, df_t
+
+
+def cluster_plot(nc):
+    ''' Function to plot clustering graph with
+    '''
+    # set up the clusterer with the number of expected clusters
+    kmeans = KMeans(n_clusters=nc)
+    # fit data
+    kmeans.fit(df_normalised)
+    # extracting labels
+    labels = kmeans.labels_
+    # adding labels to df
+    df_normalised['Labels'] = labels
+    # extracting cluster centres
+    cen = kmeans.cluster_centers_
+
+    # plotting
+    plt.figure(figsize=(6, 6))
+
+    # scatter plot
+    colors = ['red', 'blue', 'green', 'orange', 'pink']
+    labels = ['Cluster '+str(i+1) for i in range(nc)]
+
+    for i in range(nc):
+        plt.scatter(df_normalised[df_normalised['Labels'] == i]['1965'],
+                    df_normalised[df_normalised['Labels'] == i]['2015'],
+                    c=colors[i], label=labels[i])
+
+    # plot cluster centres
+    xc = cen[:, 0]
+    yc = cen[:, 1]
+    plt.scatter(xc, yc, c="k", marker="d", s=80, label='Centres')
+
+    plt.xlabel("1965")
+    plt.ylabel("2015")
+    plt.title(str(nc) + " Clusters")
+    plt.legend()
+    plt.show()
+    return
 
 
 df_ogc, df_ogc_t = read_df("API_EG.ELC.FOSL.ZS_DS2_en_csv_v2_5211704.csv")
@@ -70,37 +115,8 @@ plt.xlabel('Number of clusters')
 plt.ylabel('WCSS')
 plt.show()
 
-# Plot for two clusters
+# plot for three clusters
+cluster_plot(3)
 
-nc = 2
-kmeans = KMeans(n_clusters=nc)
-# fit data
-kmeans.fit(df_normalised)
-# extracting labels
-labels = kmeans.labels_
-# adding labels to df
-df_normalised['Labels'] = labels
-# extracting cluster centres
-cen = kmeans.cluster_centers_
-
-# plotting
-plt.figure(figsize=(6, 6))
-
-# scatter plot
-plt.scatter(df_normalised[df_normalised['Labels'] == 0]['1965'],
-            df_normalised[df_normalised['Labels'] == 0]["2015"],
-            c='red', label='Cluster1')
-plt.scatter(df_normalised[df_normalised['Labels'] == 1]['1965'],
-            df_normalised[df_normalised['Labels'] == 1]["2015"],
-            c='blue', label='Cluster2')
-
-# plot cluster centres
-xc = cen[:, 0]
-yc = cen[:, 1]
-plt.scatter(xc, yc, c="k", marker="d", s=80, label='Centres')
-
-plt.xlabel("1965")
-plt.ylabel("2015")
-plt.title("2 clusters")
-plt.legend()
-plt.show()
+# plot for four clusters
+cluster_plot(4)
