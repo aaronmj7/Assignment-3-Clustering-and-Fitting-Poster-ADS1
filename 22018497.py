@@ -12,17 +12,22 @@ import matplotlib.pyplot as plt
 
 
 def read_df(fname):
+    # reading from csv
     df = pd.read_csv(fname, skiprows=4)
+
+    # dropping columns that are not needed
     df.drop(["Country Code", "Indicator Code", "Indicator Name"], axis=1,
             inplace=True)
+    # setting index
     df.set_index(['Country Name'], inplace=True)
-    df.index.rename("Country", inplace=True)
+    # droping columns and rows with nan values
     df.dropna(how="all", axis=1, inplace=True)
     df.dropna(how="any", thresh=50, inplace=True)
+    # filling nan values
     df.fillna(0, inplace=True)
+
     # transposing
     df_t = df.transpose()
-
     # droping columns with nan values
     df_t.dropna(how='all', axis=1, inplace=True)
 
