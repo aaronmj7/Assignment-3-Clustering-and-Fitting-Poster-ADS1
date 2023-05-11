@@ -254,3 +254,20 @@ plt.title(title)
 plt.legend()
 # show the plot
 plt.show()
+
+# predicting for 2030 and 2040
+print("Canada's Electricity Produced from Oil, Gas and Coal Sources in")
+
+# for 2030
+lower2030, upper2030 = err.err_ranges(2030, logistic, param, sigmas)
+# calculate sigma of prediction from ranges
+sigma2030 = (upper2030-lower2030) / 2.0
+print("2030:", round(logistic(2030, *param), 2), "+/-",  round(sigma2030, 2),
+      "%.")
+
+# for 2040
+lower2040, upper2040 = err.err_ranges(2040, logistic, param, sigmas)
+# calculate sigma of prediction from ranges
+sigma2040 = (upper2040-lower2040) / 2.0
+print("2040:", round(logistic(2040, *param), 2), "+/-",  round(sigma2040, 2),
+      "%.")
