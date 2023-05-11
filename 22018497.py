@@ -80,7 +80,7 @@ def elbow_method(df, n):
     plt.ylabel('WCSS')
 
     # saving
-    plt.savefig('Elbow method.png', dpi=650)
+    plt.savefig('Elbow method.png', dpi=650, bbox_inches='tight')
     # show the plot
     plt.show()
 
@@ -134,10 +134,11 @@ def cluster_plot(df, nc):
     plt.title(str(nc) + " Clusters")
 
     # show legend
-    plt.legend()
+    plt.legend(fancybox=True, shadow=True, borderpad=0.5, framealpha=0.85,
+               labelcolor='linecolor')
 
     # saving
-    plt.savefig((str(nc) + " Clusters" + '.png'), dpi=650)
+    plt.savefig((str(nc) + " Clusters" + '.png'), dpi=650, bbox_inches='tight')
     # show the plot
     plt.show()
 
@@ -157,7 +158,10 @@ def logistic(t, g, t0, n0):
 df_ogc, df_ogc_t = read_df("API_EG.ELC.FOSL.ZS_DS2_en_csv_v2_5211704.csv")
 
 # setting seaborn theme
-sns.set_theme(font_scale=1.25)
+rc = {'text.color': 'black', 'axes.labelcolor': 'black',
+      'xtick.color': 'black', 'ytick.color': 'black', 'axes.edgecolor':
+      '.95', 'grid.color': '.7'}
+sns.set_theme(font='Georgia', font_scale=1.25, rc=rc)
 
 
 # clustering
@@ -229,8 +233,8 @@ df_tofit["fit"] = logistic(df_tofit.index, *param)
 # plot data fitting
 plt.figure(figsize=(10, 5))
 
-plt.plot(df_tofit.index, df_tofit.iloc[:, 0], c='dodgerblue', label="data")
-plt.plot(df_tofit.index, df_tofit["fit"], c='k', label="fit")
+plt.plot(df_tofit.index, df_tofit.iloc[:, 0], c='dodgerblue', label="Data")
+plt.plot(df_tofit.index, df_tofit["fit"], c='k', label="Fit")
 
 # calculate sigma
 sigmas = np.sqrt(np.diag(covar))
@@ -251,11 +255,16 @@ plt.ylabel('Electricity Produced(% of Total)')
 title = "Fitting Canada's Electricity Produced from Oil, Gas and Coal Sources"
 plt.title(title)
 # show legend
-plt.legend()
+plt.legend(fancybox=True, shadow=True, borderpad=0.5, framealpha=0.85,
+           labelcolor='linecolor')
+# saving
+plt.savefig('Canada Fitting.png', dpi=650, bbox_inches='tight')
 # show the plot
 plt.show()
 
+
 # predicting for 2030 and 2040
+
 print("Canada's Electricity Produced from Oil, Gas and Coal Sources in")
 
 # for 2030
