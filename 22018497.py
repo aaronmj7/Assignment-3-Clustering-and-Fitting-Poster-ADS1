@@ -221,7 +221,7 @@ plt.show()
 
 # fitting logistic function with some initial values
 param, covar = opt.curve_fit(logistic, df_tofit.index, df_tofit.iloc[:, 0],
-                             p0=(0.0, 1987.5, 100))
+                             p0=(0.04, 1987.5, 35))
 
 # add fit values to dataframe
 df_tofit["fit"] = logistic(df_tofit.index, *param)
